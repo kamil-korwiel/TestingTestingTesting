@@ -110,4 +110,10 @@ def test_is_the_same_image(login_in_page: Page):
     except Exception as e:
         login_in_page.screenshot(path=f'/home/confused/Documents/Code/PlayWrite/TestingTestingTesting/screenshot/{"fuuk"}.png')
         raise e
+
+def test_is_have_working_go_back_button(login_in_page: Page):
+    login_in_page.locator("[data-test=\"back-to-products\"]").click()
+    expect(login_in_page.locator("[data-test=\"inventory-list\"]")).to_be_visible()
     
+    
+
