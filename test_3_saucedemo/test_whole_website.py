@@ -68,10 +68,18 @@ def test_correct_item_button_text_after_click(login_in_page: Page):
     
 
 def test_shop_cart_icon_indicator(login_in_page: Page):
-    expect(login_in_page.locator('[data-test="shopping-cart-badge"]')).to_contain_text("1")
+    login_in_page.locator("[data-test=\"shopping-cart-link\"]").click()
+    expect(login_in_page.locator("[data-test=\"inventory-item\"]")).to_contain_text("1")
+    
+    
+def test_if_product_is_in_shopping_cart(login_in_page: Page):
+    login_in_page.locator("[data-test=\"shopping-cart-link\"]").click()
+    expect(login_in_page.locator("[data-test=\"inventory-item\"]")).to_be_visible()
+    login_in_page.locator("[data-test=\"continue-shopping\"]").click()
     
 
 def test_ascending_order_items_name(login_in_page: Page):
+    
     login_in_page.locator("[data-test=\"product-sort-container\"]").select_option("az")
     list_of_items = login_in_page.locator("[data-test=\"inventory-list\"]").locator("[data-test=\"inventory-item\"]").all()
     str_title_list = [item.locator('[data-test="inventory-item-name"]').text_content() for item in list_of_items]
@@ -99,7 +107,7 @@ def test_descending_order_price(login_in_page: Page):
     str_price_list = [item.locator('[class="inventory_item_price"]').text_content() for item in list_of_items]
     int_price_list =  [ float(re.search("[0-9]+.[0-9][0-9]", str_price).group(0)) for str_price in str_price_list ]  
     assert check_descending_order(int_price_list)
-    
+
 
 def test_is_the_same_image(login_in_page: Page):
     try:
@@ -114,6 +122,8 @@ def test_is_the_same_image(login_in_page: Page):
 def test_is_have_working_go_back_button(login_in_page: Page):
     login_in_page.locator("[data-test=\"back-to-products\"]").click()
     expect(login_in_page.locator("[data-test=\"inventory-list\"]")).to_be_visible()
+    
+    
     
     
 
