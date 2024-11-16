@@ -104,3 +104,10 @@ async def test_is_the_same_image(login_in_page: Page):
 async def test_is_have_working_go_back_button(login_in_page: Page):
     await login_in_page.locator("[data-test=\"back-to-products\"]").click()
     await expect(login_in_page.locator("[data-test=\"inventory-list\"]")).to_be_visible()
+
+@pytest.mark.asyncio(loop_scope="session")
+async def test_is_burger_button_is_working(login_in_page: Page):
+    await login_in_page.get_by_role("button", name="Open Menu").click()
+    await expect(login_in_page.get_by_text("All ItemsAboutLogoutReset App")).to_be_visible()
+
+    
