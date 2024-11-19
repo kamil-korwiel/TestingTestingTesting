@@ -1,4 +1,4 @@
-from playwright.async_api import async_playwright
+from playwright.async_api import async_playwright, Browser, BrowserContext
 import pytest_asyncio
 import pytest
 
@@ -11,12 +11,12 @@ async def browser():
         await browser.close()
         
 @pytest.fixture(scope='session')
-async def context(browser):
+async def context(browser:Browser):
     context = await browser.new_context()
     yield context
 
 @pytest.fixture(scope='module')
-async def page_spokopolish(context):
+async def page_spokopolish(context:BrowserContext):
     page = await context.new_page()
     await page.goto("https://spokopolish.pl/")
     yield page
