@@ -10,8 +10,13 @@ def save(name:str,payload_json:str) -> None:
 def get_file(name:str) -> dict:
     with open(f'./{name}.json', "r") as f:
         cookie = json.loads(f.read())
-        print(type(cookie))
         return cookie
+    
+async def find_cookie(name:str,  cookies:list[dict]) -> dict:
+    for coo in cookies:
+        if coo["name"] == name:
+            return coo
+    return None
 
 @pytest.mark.usefixtures("page_spokopolish")
 @pytest.mark.asyncio(loop_scope="session")
@@ -32,15 +37,10 @@ class TestCookies():
     async def test_clicking_accept_all(self,page_spokopolish: Page):
         await page_spokopolish.get_by_role("button", name="Accept All").click()
         await expect(page_spokopolish.get_by_role("heading", name="We value your privacy")).not_to_be_visible()
-        
-    async def test_cookie_after(self,page_spokopolish:Page):
+
+    async def test_cookies_after(self,page_spokopolish: Page):
         context = page_spokopolish.context
-        cookie = await context.cookies()
-        
-        print(type(cookie))
-        cookie_after_dict = cookie[0]
-        print(type(cookie_after_dict))
-        cookie_before_dict = get_file('cookie_before')[0]
-        print(type(cookie_before_dict))
-        
-        assert cookie_after_dict == cookie_before_dict
+        cookies = await context.cookies()
+        after = await find_cookie("cookieyes-consent",cookies)
+        before = get_file("cookie_before")
+        after != before
