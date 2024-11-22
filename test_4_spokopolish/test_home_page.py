@@ -20,20 +20,16 @@ async def find_cookie(name:str,  cookies:list[dict]) -> dict:
 
 @pytest.mark.usefixtures("page_spokopolish")
 @pytest.mark.asyncio(loop_scope="session")
-class TestCookies():
+class TestConsentCookieAcceptAll():
     
     async def test_cookie_before(self,page_spokopolish:Page):
         context = page_spokopolish.context
         cookie = await context.cookies()
-        save("cookie_before",json.dumps(cookie))
+        save("test_4_spokopolish/accept_all/cookie_before",json.dumps(cookie))
     
     async def test_privacy_popup(self,page_spokopolish: Page):
         await expect(page_spokopolish.get_by_role("heading", name="We value your privacy")).to_be_visible()
     
-    # async def test_clicking_reject_all(self,page_spokopolish: Page):
-    #     await page_spokopolish.get_by_role("button", name="Reject All").click()
-    #     await expect(page_spokopolish.get_by_role("heading", name="We value your privacy")).not_to_be_visible()
-        
     async def test_clicking_accept_all(self,page_spokopolish: Page):
         await page_spokopolish.get_by_role("button", name="Accept All").click()
         await expect(page_spokopolish.get_by_role("heading", name="We value your privacy")).not_to_be_visible()
@@ -42,5 +38,29 @@ class TestCookies():
         context = page_spokopolish.context
         cookies = await context.cookies()
         after = await find_cookie("cookieyes-consent",cookies)
-        before = get_file("cookie_before")
+        before = get_file("test_4_spokopolish/accept_all/cookie_before")
         after != before
+        
+
+@pytest.mark.usefixtures("page_spokopolish")
+@pytest.mark.asyncio(loop_scope="session")
+class TestConsentCookieRejectAll():
+    
+    async def test_cookie_before(self,page_spokopolish:Page):
+        context = page_spokopolish.context
+        cookie = await context.cookies()
+        save("test_4_spokopolish/reject_all/cookie_before",json.dumps(cookie))
+    
+    async def test_privacy_popup(self,page_spokopolish: Page):
+        await expect(page_spokopolish.get_by_role("heading", name="We value your privacy")).to_be_visible()
+    
+    async def test_clicking_reject_all(self,page_spokopolish: Page):
+        await page_spokopolish.get_by_role("button", name="Reject All").click()
+        await expect(page_spokopolish.get_by_role("heading", name="We value your privacy")).not_to_be_visible()
+    
+    async def test_cookies_after(self,page_spokopolish: Page):
+        context = page_spokopolish.context
+        cookies = await context.cookies()
+        after = await find_cookie("cookieyes-consent",cookies)
+        before = get_file("test_4_spokopolish/reject_all/cookie_before")
+        after == before
