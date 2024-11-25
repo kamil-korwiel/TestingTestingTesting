@@ -4,7 +4,6 @@ from playwright.sync_api import Page, expect
 
 def test_google_attribute(page: Page):
     page.goto("https://google.pl/")
-    page.get_by_label("Wybierz język, pl").click()
     page.get_by_role("button", name="Odrzuć wszystko").click()
     
     atr = page.get_by_role("img", name="Google").get_attribute("height")

@@ -1,29 +1,29 @@
 import pytest
 from playwright.sync_api import sync_playwright, expect
 
-@pytest.fixture(scope="session")
+@pytest.fixture(autouse=True)
 def login_in_page():
     # Initialize Playwright and open a browser
-    playwright = sync_playwright().start()
-    browser = playwright.chromium.launch()
-    context = browser.new_context()
-    page = context.new_page()
-    
-    user = "standard_user"
-    password = "secret_sauce"
-    
-    page.goto("https://www.saucedemo.com/")
-    page.locator("[data-test=\"username\"]").click()
-    page.locator("[data-test=\"username\"]").fill(user)
-    page.locator("[data-test=\"password\"]").click()
-    page.locator("[data-test=\"password\"]").fill(password)
-    page.locator("[data-test=\"login-button\"]").click()
-    
-    yield page 
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch()
+        context = browser.new_context()
+        page = context.new_page()
+        
+        user = "standard_user"
+        password = "secret_sauce"
+        
+        page.goto("https://www.saucedemo.com/")
+        page.locator("[data-test=\"username\"]").click()
+        page.locator("[data-test=\"username\"]").fill(user)
+        page.locator("[data-test=\"password\"]").click()
+        page.locator("[data-test=\"password\"]").fill(password)
+        page.locator("[data-test=\"login-button\"]").click()
+        
+        yield page 
 
-    # Teardown
-    browser.close()
-    playwright.stop()
+        # Teardown
+        browser.close()
+        playwright.stop()
 
 def test_visit_homepage(login_in_page):
     expect(login_in_page).to_have_title("Swag Labs")
