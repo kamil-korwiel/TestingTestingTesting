@@ -1,7 +1,9 @@
 from playwright.sync_api import Page, expect
 
 
+import pytest
 
+@pytest.mark.browser_context_args(timezone_id="Europe/Warsaw", locale="pl-PL")
 def test_google_attribute(page: Page):
     page.goto("https://google.pl/")
     page.get_by_role("button", name="Odrzuć wszystko").click()
