@@ -96,7 +96,7 @@ def test_is_the_same_image(login_in_page: Page):
         img_from_item = login_in_page.locator("[data-test=\"item-sauce-labs-backpack-img\"]").get_attribute("src")
         assert img_from_grid == img_from_item
     except Exception as e:
-        login_in_page.screenshot(path=f'/home/confused/Documents/Code/PlayWrite/TestingTestingTesting/screenshot/{"fuuk"}.png')
+        # login_in_page.screenshot(path=f'/home/confused/Documents/Code/PlayWrite/TestingTestingTesting/screenshot/{"fuuk"}.png')
         raise e
 
 
