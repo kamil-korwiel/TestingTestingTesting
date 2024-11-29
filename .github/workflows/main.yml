@@ -24,8 +24,15 @@ jobs:
     - name: Ensure browsers are installed
       run: python -m playwright install --with-deps
 
-    - name: Run Pytest
-      run: pytest --tracing=retain-on-failure
+    - name: Google Pytest 
+      run: pytest --tracing=retain-on-failure ./test_2_google
+
+    - name: Saucedemo Pytest
+      run: pytest --tracing=retain-on-failure ./test_3_saucedemo
+
+    - name: SpokoPolish Pytest
+      run: pytest --tracing=retain-on-failure ./test_4_spokopolish
+
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
