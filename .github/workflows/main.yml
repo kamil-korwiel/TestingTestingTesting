@@ -4,9 +4,12 @@ on:
     branches: [ main ]
 jobs:
   test:
-    timeout-minutes: 10
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        test-folder: ["test_2_google", "test_3_saucedemo", "test_4_spokopolish"]
+        browsers: ["chrome", "firefox", "webkit"]
+    
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -24,14 +27,8 @@ jobs:
     - name: Ensure browsers are installed
       run: python -m playwright install --with-deps
 
-    - name: Google Pytest 
-      run: pytest --tracing=retain-on-failure ./test_2_google
-
-    - name: Saucedemo Pytest
-      run: pytest --tracing=retain-on-failure ./test_3_saucedemo
-
-    - name: SpokoPolish Pytest
-      run: pytest --tracing=retain-on-failure ./test_4_spokopolish
+    - name: Pytest ${{ matrix.test-folder }}
+      run: pytest --tracing=retain-on-failure  ${{ matrix.test-folder }} --browser ${{ matrix.browsers }}
 
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
