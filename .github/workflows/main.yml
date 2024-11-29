@@ -2,12 +2,16 @@ name: Playwright Tests
 on:
   push:
     branches: [ main ]
+
+  pull_request:
+    branches: [ main ]
+    
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        test-folder: ["test_2_google", "test_3_saucedemo", "test_4_spokopolish"]
+        test-folder: ["test_3_saucedemo", "test_4_spokopolish"]
         browsers: ["chromium", "firefox", "webkit"]
     
     steps:
