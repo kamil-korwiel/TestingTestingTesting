@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         test-folder: ["test_2_google", "test_3_saucedemo", "test_4_spokopolish"]
-        browsers: ["chrome", "firefox", "webkit"]
+        browsers: ["chromium", "firefox", "webkit"]
     
     steps:
     - name: Checkout repository
